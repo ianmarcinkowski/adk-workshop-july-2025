@@ -1,2 +1,4 @@
 google-adk
 requests
+PyPDF2>=3.0.1
+python-dotenv
