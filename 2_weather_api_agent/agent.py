@@ -1,0 +1,120 @@
+import datetime
+import requests
+from zoneinfo import ZoneInfo
+from google.adk.agents import Agent
+
+
+def get_weather_from_api(city: str) -> dict:
+    """Retrieves the current weather report for a specified city.
+
+    Args:
+        city (str): The name of the city for which to retrieve the weather
+            report.
+
+    Returns:
+        dict: status and result or error msg.
+    """
+    return {
+        "status": "error",
+        "error_message": "City name cannot be empty.",
+    }
+
+
+def PLACEHOLDER_get_weather_from_api(city: str) -> dict:
+    """Retrieves the current weather report for a specified city.
+
+    Args:
+        city (str): The name of the city for which to retrieve the weather
+            report.
+
+    Returns:
+        dict: status and result or error msg.
+    """
+    city = city.strip().lower()
+    if not city:
+        return {
+            "status": "error",
+            "error_message": "City name cannot be empty.",
+        }
+
+    # Use Open-Meteo Geocoding API to find coordinates for the city
+    geocoding_url = (
+        f"https://geocoding-api.open-meteo.com/v1/search?name={city}&count=1"
+    )
+    try:
+        geo_response = requests.get(geocoding_url)
+        geo_response.raise_for_status()
+        geo_data = geo_response.json()
+
+        if not geo_data.get("results"):
+            return {
+                "status": "error",
+                "error_message": f"Could not find weather for '{city}'.",
+            }
+
+        location = geo_data["results"][0]
+        latitude = location["latitude"]
+        longitude = location["longitude"]
+        name = location["name"]
+
+        # Use Open-Meteo Weather API to get the weather
+        weather_url = (
+            "https://api.open-meteo.com/v1/forecast?latitude="
+            f"{latitude}&longitude={longitude}&current_weather=true"
+        )
+        weather_response = requests.get(weather_url)
+        weather_response.raise_for_status()
+        weather_data = weather_response.json()
+
+        current_weather = weather_data["current_weather"]
+        temperature = current_weather["temperature"]
+        wind_speed = current_weather["windspeed"]
+
+        report = (
+            f"The current weather in {name} is {temperature}°C with a "
+            f"wind speed of {wind_speed} km/h."
+        )
+
+        return {"status": "success", "report": report}
+
+    except requests.exceptions.RequestException as e:
+        return {"status": "error", "error_message": f"API request error: {e}"}
+
+
+def get_current_time(city: str) -> dict:
+    """Returns the current time in a specified city.
+
+    Args:
+        city (str): The name of the city for which to retrieve the current
+            time.
+
+    Returns:
+        dict: status and result or error msg.
+    """
+
+    if city.lower() == "new york":
+        tz_identifier = "America/New_York"
+    else:
+        return {
+            "status": "error",
+            "error_message": (f"Sorry, I don't have timezone information for {city}."),
+        }
+
+    tz = ZoneInfo(tz_identifier)
+    now = datetime.datetime.now(tz)
+    report = (
+        f"The current time in {city} is " f'{now.strftime("%Y-%m-%d %H:%M:%S %Z%z")}'
+    )
+    return {"status": "success", "report": report}
+
+
+root_agent = Agent(
+    name="weather_api_agent",
+    model="gemini-2.0-flash",
+    description="Agent to answer questions about the weather in a city using an open API",
+    instruction=(
+        "You are a helpful agent who can answer user questions about the "
+        " weather in a city."
+    ),
+    tools=[PLACEHOLDER_get_weather_from_api],
+)

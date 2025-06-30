@@ -16,7 +16,7 @@ We are assuming you are running on a Linux or MacOS host for these instructions.
 We will create a Python virutal environment ([virtualenv Primer](https://realpython.com/python-virtual-environments-a-primer/)) and install Python libraries required for the project.
 
 ```bash
-python3 -m venv .venv && source ~/.venv/bin/activate
+python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
@@ -24,9 +24,12 @@ pip install -r requirements.txt
 
 - Navigate to https://aistudio.google.com/apikey and generate a new API key
   - You may need to create a new project 
-- Update `multi_tool_agent/.env` with the key you have created
+- Copy `sample.env` to `.env` (To ensure your API key is not commited in Git the `.env` file is ignored by version control)
+- Update `.env` with the API key you have created
 
 # 1. Run a basic agent
+
+Source: https://google.github.io/adk-docs/get-started/quickstart/
 
 From the Google ADK Quickstart
 
@@ -34,3 +37,28 @@ From the Google ADK Quickstart
 - Ask the agent for weather in New York
 - Ask the agent for weather in another location
 
+
+# 2. Run agent with a weather API
+
+Source: https://google.github.io/adk-docs/get-started/quickstart/ with some additions for our workshop
+
+Examples found in [2_weather_api_agent/](./2_weather_api_agent/)
+
+- Open [2_weather_api_agent/agent.py](./2_weather_api_agent/agent.py)
+
+- If using Cursor, ask Agent Mode to update our placeholder function `get_weather_from_api` to call an open weather API.  Here is an example prompt that should work reasonably well
+
+    ```
+    Let's modify our placeholder function `get_weather_from_api` to call a publicly-accessible weather API.
+    
+    Please sanitize the name of the provided city and call a publicly-accessible weather API for the provided location, returning appropriate data to the user`
+    ```
+
+- Go through Cursor's Agent Mode prompts as necessary and review the generated code
+- Alternatively, if Cursor gets stuck, rename the `PLACEHOLDER_get_weather_from_api` found in [2_weather_api_agent/agent.py](./2_weather_api_agent/agent.py) or update the name of the tool function being passed into our agent
+- Run the agent `adk run 2_weather_api_agent`
+- Ask for the weather in New York, Toronto, Beijing
+
+# Sources
+
+- Google ADK Quickstart https://google.github.io/adk-docs/get-started/quickstart
