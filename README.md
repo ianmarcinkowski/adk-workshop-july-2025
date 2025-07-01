@@ -58,6 +58,20 @@ Examples found in [2_weather_api_agent/](./2_weather_api_agent/)
 - Ask for the weather in New York, Toronto, Beijing
 - (Optional) Ask Cursor to add a method for fetching time from NIST's time server
 
+#  3. Google Search agent & ADK web UI
+
+- In your terminal, launch the ADK web UI `adk web`
+- Select the `3_search_agent` agent from the top-left dropdown
+- This agent will able to perform Google searches and generate responses
+- Search: "What is a popular Ontario-specific dessert?"
+
+#  4. Live Voice Search
+
+- In your terminal, launch the ADK web UI `adk web`
+- Select the `4_voice_agent` agent from the top-left dropdown
+- Use the microphone or webcam icon on the caht interface to enable 
+- Search: "What is a popular Ontario-specific dessert?"
+
 # Sources
 
 - Google ADK Quickstart https://google.github.io/adk-docs/get-started/quickstart
