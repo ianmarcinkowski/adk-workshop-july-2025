@@ -23,8 +23,13 @@ pip install -r requirements.txt
 
 ## Get an API key for Google's AI Studio
 
+**For the workshop, I will provide an API key to use with your environment to speed up the initial setup**;
+however, if you want to go through these examples on your own, follow the `Set up the model` section of 
+the ADK Quickstart documentation: https://google.github.io/adk-docs/get-started/quickstart/#set-up-the-model
+
+Here is a basic snippet:
+
 - Navigate to https://aistudio.google.com/apikey and generate a new API key
-  - You may need to create a new project
 - Copy `sample.env` to `.env` (To ensure your API key is not commited in Git the `.env` file is ignored by version control)
 - Update `.env` with the API key you have created
 
