@@ -47,9 +47,9 @@ Examples found in [2_weather_api_agent/](./2_weather_api_agent/)
 - If using Cursor, delete the implementation of `get_weather_from_api` and ask Agent Mode to update our placeholder function `get_weather_from_api` to call an open weather API. Here is an example prompt that should work reasonably well
 
   ```
-  Let's modify our placeholder function `get_weather_from_api` to call a publicly-accessible weather API.
+  Let's modify our placeholder function `get_weather_from_api` to call a publicly-accessible weather API.  Please choose an API that does not require an API token.
 
-  Please sanitize the name of the provided city and call a publicly-accessible weather API for the provided location, returning appropriate data to the user`
+  Please sanitize the name of the provided city and call a publicly-accessible weather API for the provided location, returning appropriate data to the user.
   ```
 
 - Go through Cursor's Agent Mode prompts as necessary and review the generated code
