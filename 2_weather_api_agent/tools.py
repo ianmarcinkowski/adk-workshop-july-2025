@@ -1,4 +1,5 @@
 import requests
+import urllib.parse
 
 
 def get_weather_from_api(city: str) -> dict:
@@ -10,53 +11,47 @@ def get_weather_from_api(city: str) -> dict:
     Returns:
         dict: status and result or error msg.
     """
-    city = city.strip().lower()
-    if not city:
-        return {
-            "status": "error",
-            "error_message": "City name cannot be empty.",
-        }
-
-    # Use Open-Meteo Geocoding API to find coordinates for the city
-    geocoding_url = (
-        f"https://geocoding-api.open-meteo.com/v1/search?name={city}&count=1"
-    )
     try:
-        geo_response = requests.get(geocoding_url)
-        geo_response.raise_for_status()
-        geo_data = geo_response.json()
-
-        if not geo_data.get("results"):
-            return {
-                "status": "error",
-                "error_message": f"Could not find weather for '{city}'.",
+        # Sanitize the city name
+        city = city.strip()
+        if not city:
+            return {"status": "error", 
+                    "message": "City name cannot be empty"}
+        
+        # URL encode the city name for safe API call
+        city_encoded = urllib.parse.quote(city)
+        
+        # Make API call to wttr.in (free weather API, no token required)
+        url = f"https://wttr.in/{city_encoded}?format=j1"
+        response = requests.get(url, timeout=10)
+        
+        if response.status_code == 200:
+            weather_data = response.json()
+            
+            # Extract relevant information from the API response
+            current = weather_data.get('current_condition', [{}])[0]
+            location = weather_data.get('nearest_area', [{}])[0]
+            
+            result = {
+                "city": location.get('areaName', [{}])[0].get('value', city),
+                "country": location.get('country', [{}])[0].get('value', ''),
+                "temperature_c": current.get('temp_C', ''),
+                "temperature_f": current.get('temp_F', ''),
+                "condition": (current.get('weatherDesc', [{}])[0]
+                             .get('value', '')),
+                "humidity": current.get('humidity', ''),
+                "wind_speed_kmh": current.get('windspeedKmph', ''),
+                "wind_direction": current.get('winddir16Point', ''),
+                "feels_like_c": current.get('FeelsLikeC', ''),
+                "feels_like_f": current.get('FeelsLikeF', '')
             }
-
-        location = geo_data["results"][0]
-        latitude = location["latitude"]
-        longitude = location["longitude"]
-        name = location["name"]
-
-        # Use Open-Meteo Weather API to get the weather
-        weather_url = (
-            "https://api.open-meteo.com/v1/forecast?latitude="
-            f"{latitude}&longitude={longitude}&current_weather=true"
-        )
-        weather_response = requests.get(weather_url)
-        weather_response.raise_for_status()
-        weather_data = weather_response.json()
-
-        current_weather = weather_data["current_weather"]
-        temperature = current_weather["temperature"]
-        wind_speed = current_weather["windspeed"]
-
-        report = (
-            f"The current weather in {name} is {temperature}°C with a "
-            f"wind speed of {wind_speed} km/h."
-        )
-
-        return {"status": "success", "report": report}
-
-    except requests.exceptions.RequestException as e:
-        return {"status": "error", "error_message": f"API request error: {e}"}
-
+            
+            return {"status": "success", "result": result}
+        else:
+            error_msg = f"Failed to fetch weather data. Status code: {response.status_code}"
+            return {"status": "error", "message": error_msg}
+            
+    except requests.RequestException as e:
+        return {"status": "error", "message": f"Network error: {str(e)}"}
+    except Exception as e:
+        return {"status": "error", "message": f"An error occurred: {str(e)}"}

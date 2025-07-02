@@ -6,6 +6,7 @@
 2.  Run a basic agent with simple functions as tools
 3.  Run an agent with access to a web API
     -  (Optional) Demonstrate Cursor's agent mode to create the API calls for us
+4.  Run a workflow agent that demonstrates parallel, sequential workflows
 
 # Environment Setup
 
@@ -31,8 +32,6 @@ pip install -r requirements.txt
 
 Source: https://google.github.io/adk-docs/get-started/quickstart/
 
-From the Google ADK Quickstart
-
 - `adk run 1_basic_weather_agent`
 - Ask the agent for weather in New York
 - Ask the agent for weather in another location
@@ -40,8 +39,6 @@ From the Google ADK Quickstart
 # 2. Run agent with access to a public API
 
 Source: https://google.github.io/adk-docs/get-started/quickstart/ with some additions for our workshop
-
-Examples found in [2_weather_api_agent/](./2_weather_api_agent/)
 
 - Open [2_weather_api_agent/agent.py](./2_weather_api_agent/agent.py)
 - If using Cursor, delete the implementation of `get_weather_from_api` and ask Agent Mode to update our placeholder function `get_weather_from_api` to call an open weather API. Here is an example prompt that should work reasonably well
@@ -58,20 +55,15 @@ Examples found in [2_weather_api_agent/](./2_weather_api_agent/)
 - Ask for the weather in New York, Toronto, Beijing
 - (Optional) Ask Cursor to add a method for fetching time from NIST's time server
 
-#  3. Google Search agent & ADK web UI
+#  3. Agent workflows, Parallel and Sequential Agents
+
+Source: https://google.github.io/adk-docs/agents/workflow-agents/parallel-agents/#independent-execution-and-state-management
 
 - In your terminal, launch the ADK web UI `adk web`
-- Select the `3_search_agent` agent from the top-left dropdown
-- This agent will able to perform Google searches and generate responses
-- Search: "What is a popular Ontario-specific dessert?"
-
-#  4. Live Voice Search
-
-- In your terminal, launch the ADK web UI `adk web`
-- Select the `4_voice_agent` agent from the top-left dropdown
-- Use the microphone or webcam icon on the caht interface to enable 
-- Search: "What is a popular Ontario-specific dessert?"
+- Select the `3_workflow_agent` agent from the top-left dropdown
+- Search: "Summarize the energy landscape in Canada"
 
 # Sources
 
 - Google ADK Quickstart https://google.github.io/adk-docs/get-started/quickstart
+- Workflow Agents https://google.github.io/adk-docs/agents/workflow-agents/parallel-agents/#independent-execution-and-state-management
