@@ -71,4 +71,5 @@ Source: https://google.github.io/adk-docs/agents/workflow-agents/parallel-agents
 # Sources
 
 - Google ADK Quickstart https://google.github.io/adk-docs/get-started/quickstart
-- Workflow Agents https://google.github.io/adk-docs/agents/workflow-agents/parallel-agents/#independent-execution-and-state-management
+- Workflow Agents overview https://google.github.io/adk-docs/agents/workflow-agents/
+- Parallel Agents example (Step 3) https://google.github.io/adk-docs/agents/workflow-agents/parallel-agents/
